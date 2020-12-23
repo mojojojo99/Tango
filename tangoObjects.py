@@ -10,7 +10,7 @@ from builtins import str
 import redis
 import pickle
 from queue import Queue
-from .config import Config
+from config import Config
 
 redisConnection = None
 
