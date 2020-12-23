@@ -3,5 +3,6 @@ services:
         - redis-server
 before_script:
         - pip install pyflakes
+        - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
 script:
         - python -m unittest tests.testObjects
