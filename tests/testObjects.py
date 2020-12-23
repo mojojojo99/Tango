@@ -5,17 +5,17 @@ import unittest
 import redis
 
 from tangoObjects import TangoDictionary, TangoJob, TangoQueue
-from config import Config
+import config
 
 
 class TestDictionary(unittest.TestCase):
 
     def setUp(self):
-        if Config.USE_REDIS:
+        if config.Config.USE_REDIS:
             __db = redis.StrictRedis(
-                Config.REDIS_HOSTNAME, Config.REDIS_PORT, db=0)
+                config.Config.REDIS_HOSTNAME, config.Config.REDIS_PORT, db=0)
             __db.flushall()
-        
+
         self.test_entries = {
             "key": "value",
             0: "0_value",
@@ -29,7 +29,7 @@ class TestDictionary(unittest.TestCase):
 
         for key in self.test_entries:
             test_dict.set(key, self.test_entries[key])
-        
+
         for key in self.test_entries:
             self.assertTrue(key in test_dict)
             self.assertEqual(test_dict.get(key), self.test_entries[key])
@@ -49,22 +49,22 @@ class TestDictionary(unittest.TestCase):
         self.assertTrue("key" not in test_dict)
 
     def test_nativeDictionary(self):
-        Config.USE_REDIS = False
+        config.Config.USE_REDIS = False
         self.runDictionaryTests()
 
     def test_remoteDictionary(self):
-        Config.USE_REDIS = True
+        config.Config.USE_REDIS = True
         self.runDictionaryTests()
 
 
 class TestQueue(unittest.TestCase):
     def setUp(self):
-        if Config.USE_REDIS:
+        if config.Config.USE_REDIS:
             __db = redis.StrictRedis(
-                Config.REDIS_HOSTNAME, Config.REDIS_PORT, db=0)
+                config.Config.REDIS_HOSTNAME, config.Config.REDIS_PORT, db=0)
             __db.flushall()
         self.test_entries = [i for i in range(10)]
-    
+
     def addAllToQueue(self):
         # Add all items into the queue
         for x in self.test_entries:
@@ -114,11 +114,11 @@ class TestQueue(unittest.TestCase):
                 self.assertEqual(item, x)
 
     def test_nativeQueue(self):
-        Config.USE_REDIS = False
+        config.Config.USE_REDIS = False
         self.runQueueTests()
 
     def test_remoteQueue(self):
-        Config.USE_REDIS = True
+        config.Config.USE_REDIS = True
         self.runQueueTests()
 
 
